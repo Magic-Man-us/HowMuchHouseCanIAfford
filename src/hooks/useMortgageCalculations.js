@@ -63,7 +63,6 @@ export function useMortgageCalculations({
         principal: p,
         total,
         rate: adjustedRate,
-        baseRate: rate,
         years,
         frontDTI: (total / monthlyIncome) * 100,
         backDTI: ((total + monthlyDebt) / monthlyIncome) * 100,
