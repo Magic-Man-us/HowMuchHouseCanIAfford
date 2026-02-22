@@ -13,10 +13,10 @@ export function RefinanceTab({
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
       <Card title="Refinance Scenario" accent={c.pink}>
         <div style={{ fontSize: 12, color: c.dim, marginBottom: 16 }}>Model refinancing your 30-year loan</div>
-        <Input label="Years Until Refinance" value={refiYears} onChange={setRefiYears} suffix="years" step={1} min={1} max={29} />
-        <Input label="Expected New Rate" value={refiRate} onChange={setRefiRate} suffix="%" step={0.125} min={0} max={20} />
-        <Select label="New Loan Term" value={refiTerm} onChange={(v) => setRefiTerm(Number(v))} options={[[30, '30 Years'], [25, '25 Years'], [20, '20 Years'], [15, '15 Years']]} />
-        <Input label="Refi Closing Costs" value={refiClosingPercent} onChange={setRefiClosingPercent} suffix="% of balance" step={0.5} min={0} max={10} />
+        <Input label="Years Until Refinance" value={refiYears} onChange={setRefiYears} suffix="years" step={1} min={1} max={29} fieldKey="refiYears" />
+        <Input label="Expected New Rate" value={refiRate} onChange={setRefiRate} suffix="%" step={0.125} min={0} max={20} fieldKey="refiRate" />
+        <Select label="New Loan Term" value={refiTerm} onChange={(v) => setRefiTerm(Number(v))} options={[[30, '30 Years'], [25, '25 Years'], [20, '20 Years'], [15, '15 Years']]} fieldKey="refiTerm" />
+        <Input label="Refi Closing Costs" value={refiClosingPercent} onChange={setRefiClosingPercent} suffix="% of balance" step={0.5} min={0} max={10} fieldKey="refiClosingPercent" />
         <div style={{ paddingTop: 16, borderTop: `1px solid ${c.border}` }}>
           <div style={{ fontSize: 12, color: c.muted, marginBottom: 8 }}>At refinance (year {refiYears})</div>
           {[['Remaining Balance', fmt(calc.refi.balanceAtRefi)], ['Home Equity', fmt(calc.refi.equityAtRefi)], ['Loan-to-Value', pct(calc.refi.ltv)], ['Refi Closing Costs', fmt(calc.refi.refiClosingCosts)]].map(([label, val], i) => (

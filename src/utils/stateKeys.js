@@ -13,6 +13,7 @@ export const STATE_DEFAULTS = {
   downPaymentPercent: 20,
   propertyType: 'Single Family',
   propertyUse: 'Primary',
+  propertyState: '',
   propertyTaxRate: 1.1,
   homeInsurance: 150,
   hoaFees: 0,
@@ -54,6 +55,7 @@ export const URL_KEY_MAP = {
   downPaymentPercent: 'dp',
   propertyType: 'pt',
   propertyUse: 'pu',
+  propertyState: 'ps',
   propertyTaxRate: 'tr',
   homeInsurance: 'hi',
   hoaFees: 'hoa',
@@ -88,6 +90,6 @@ export const URL_KEY_REVERSE = Object.fromEntries(
 
 // Keys that are strings (not numbers)
 export const STRING_KEYS = new Set([
-  'employmentType', 'propertyType', 'propertyUse', 'loanType', 'rateType',
+  'employmentType', 'propertyType', 'propertyUse', 'propertyState', 'loanType', 'rateType',
   'selectedLender', 'customLenderName', 'extraPaymentLoan',
 ]);

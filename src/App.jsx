@@ -25,11 +25,12 @@ export default function App() {
   const [creditCards, setCreditCards] = useState(0);
   const [otherDebt, setOtherDebt] = useState(0);
 
-  // Property Details
+  // Property & Taxes
   const [homePrice, setHomePrice] = useState(500000);
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
   const [propertyType, setPropertyType] = useState('Single Family');
   const [propertyUse, setPropertyUse] = useState('Primary');
+  const [propertyState, setPropertyState] = useState('');
   const [propertyTaxRate, setPropertyTaxRate] = useState(1.1);
   const [homeInsurance, setHomeInsurance] = useState(150);
   const [hoaFees, setHoaFees] = useState(0);
@@ -132,7 +133,7 @@ export default function App() {
   const getState = useCallback(() => ({
     totalIncome, creditScore, employmentType, assets,
     studentLoans, carPayment, creditCards, otherDebt,
-    homePrice, downPaymentPercent, propertyType, propertyUse,
+    homePrice, downPaymentPercent, propertyType, propertyUse, propertyState,
     propertyTaxRate, homeInsurance, hoaFees,
     loanType, rateType, discountPoints,
     selectedLender, customLenderName,
@@ -144,7 +145,7 @@ export default function App() {
   }), [
     totalIncome, creditScore, employmentType, assets,
     studentLoans, carPayment, creditCards, otherDebt,
-    homePrice, downPaymentPercent, propertyType, propertyUse,
+    homePrice, downPaymentPercent, propertyType, propertyUse, propertyState,
     propertyTaxRate, homeInsurance, hoaFees,
     loanType, rateType, discountPoints,
     selectedLender, customLenderName,
@@ -158,7 +159,7 @@ export default function App() {
   const setters = {
     totalIncome: setTotalIncome, creditScore: setCreditScore, employmentType: setEmploymentType, assets: setAssets,
     studentLoans: setStudentLoans, carPayment: setCarPayment, creditCards: setCreditCards, otherDebt: setOtherDebt,
-    homePrice: setHomePrice, downPaymentPercent: setDownPaymentPercent, propertyType: setPropertyType, propertyUse: setPropertyUse,
+    homePrice: setHomePrice, downPaymentPercent: setDownPaymentPercent, propertyType: setPropertyType, propertyUse: setPropertyUse, propertyState: setPropertyState,
     propertyTaxRate: setPropertyTaxRate, homeInsurance: setHomeInsurance, hoaFees: setHoaFees,
     loanType: setLoanType, rateType: setRateType, discountPoints: setDiscountPoints,
     selectedLender: setSelectedLender, customLenderName: setCustomLenderName,
@@ -241,6 +242,7 @@ export default function App() {
             downPaymentPercent={downPaymentPercent} setDownPaymentPercent={setDownPaymentPercent}
             propertyType={propertyType} setPropertyType={setPropertyType}
             propertyUse={propertyUse} setPropertyUse={setPropertyUse}
+            propertyState={propertyState} setPropertyState={setPropertyState}
             propertyTaxRate={propertyTaxRate} setPropertyTaxRate={setPropertyTaxRate}
             homeInsurance={homeInsurance} setHomeInsurance={setHomeInsurance}
             hoaFees={hoaFees} setHoaFees={setHoaFees}

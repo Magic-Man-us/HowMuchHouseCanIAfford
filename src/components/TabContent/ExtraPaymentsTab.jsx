@@ -1,15 +1,19 @@
 import { c } from '../../constants/theme';
-import { Card, Select, Slider } from '../ui';
+import { Card, Select, Slider, InfoPanel } from '../ui';
+import { fieldHelp } from '../../constants/fieldHelp';
 import { fmt, fmt2, pct } from '../../utils/formatters';
 
 export function ExtraPaymentsTab({ calc, extraPayment, setExtraPayment, extraPaymentLoan, setExtraPaymentLoan }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
       <Card title="Extra Payment Calculator" accent={c.cyan}>
-        <Select label="Apply to Loan" value={extraPaymentLoan} onChange={setExtraPaymentLoan} options={[['30', `30-Year at ${pct(calc.loan30.rate)}`], ['15', `15-Year at ${pct(calc.loan15.rate)}`]]} />
+        <Select label="Apply to Loan" value={extraPaymentLoan} onChange={setExtraPaymentLoan} options={[['30', `30-Year at ${pct(calc.loan30.rate)}`], ['15', `15-Year at ${pct(calc.loan15.rate)}`]]} fieldKey="extraPaymentLoan" />
         <div style={{ marginBottom: 20 }}>
-          <label style={{ display: 'block', fontSize: 12, color: c.muted, marginBottom: 8 }}>Extra Monthly Payment: {fmt(extraPayment)}</label>
-          <Slider value={extraPayment} onChange={setExtraPayment} min={0} max={2000} step={50} color={c.cyan} />
+          <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: c.muted, marginBottom: 8 }}>
+            Extra Monthly Payment: {fmt(extraPayment)}
+            <InfoPanel fieldKey="extraPayment" helpData={fieldHelp.extraPayment} />
+          </label>
+          <Slider value={extraPayment} onChange={setExtraPayment} min={0} max={2000} step={50} color={c.cyan} title={fieldHelp.extraPayment?.hint} />
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
             <span style={{ fontSize: 10, color: c.dim }}>$0</span>
             <span style={{ fontSize: 10, color: c.dim }}>$1,000</span>

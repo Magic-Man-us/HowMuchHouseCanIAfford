@@ -16,11 +16,11 @@ export function CostsTab({
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
       <Card title="Closing Costs">
-        <Input label="Closing Cost %" value={closingCostPercent} onChange={setClosingCostPercent} suffix="% of loan" step={0.5} min={0} max={10} />
+        <Input label="Closing Cost %" value={closingCostPercent} onChange={setClosingCostPercent} suffix="% of loan" step={0.5} min={0} max={10} fieldKey="closingCostPercent" />
         <div style={{ fontSize: 12, color: c.dim, marginBottom: 16 }}>Typically 2-5%</div>
-        <Input label="Inspection Fee" value={inspectionFee} onChange={setInspectionFee} prefix="$" min={0} max={10000} />
-        <Input label="Appraisal Fee" value={appraisalFee} onChange={setAppraisalFee} prefix="$" min={0} max={10000} />
-        <Input label="Title Insurance" value={titleInsurance || Math.round(calc.estimatedTitleInsurance)} onChange={setTitleInsurance} prefix="$" min={0} max={100000} />
+        <Input label="Inspection Fee" value={inspectionFee} onChange={setInspectionFee} prefix="$" min={0} max={10000} fieldKey="inspectionFee" />
+        <Input label="Appraisal Fee" value={appraisalFee} onChange={setAppraisalFee} prefix="$" min={0} max={10000} fieldKey="appraisalFee" />
+        <Input label="Title Insurance" value={titleInsurance || Math.round(calc.estimatedTitleInsurance)} onChange={setTitleInsurance} prefix="$" min={0} max={100000} fieldKey="titleInsurance" />
         <div style={{ paddingTop: 12, borderTop: `1px solid ${c.border}` }}>
           {[
             ['Lender Closing Costs', calc.closingCosts],
@@ -42,9 +42,9 @@ export function CostsTab({
         </div>
       </Card>
       <Card title="Post-Purchase Costs">
-        <Input label="Renovation Budget" value={renovationBudget} onChange={setRenovationBudget} prefix="$" min={0} max={10000000} />
-        <Input label="Moving Costs" value={movingCosts} onChange={setMovingCosts} prefix="$" min={0} max={100000} />
-        <Input label="Furniture & Appliances" value={furnitureAppliances} onChange={setFurnitureAppliances} prefix="$" min={0} max={1000000} />
+        <Input label="Renovation Budget" value={renovationBudget} onChange={setRenovationBudget} prefix="$" min={0} max={10000000} fieldKey="renovationBudget" />
+        <Input label="Moving Costs" value={movingCosts} onChange={setMovingCosts} prefix="$" min={0} max={100000} fieldKey="movingCosts" />
+        <Input label="Furniture & Appliances" value={furnitureAppliances} onChange={setFurnitureAppliances} prefix="$" min={0} max={1000000} fieldKey="furnitureAppliances" />
         <div style={{ paddingTop: 12, borderTop: `1px solid ${c.border}` }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0' }}>
             <span style={{ fontSize: 13, fontWeight: 600 }}>Total Post-Purchase</span>

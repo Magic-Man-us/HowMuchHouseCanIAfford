@@ -4,9 +4,11 @@ import { c } from '../../constants/theme';
 export function Tooltip({ text, children }) {
   const [show, setShow] = useState(false);
 
+  if (!text) return children;
+
   return (
-    <span
-      style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}
+    <div
+      style={{ position: 'relative' }}
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}
     >
@@ -44,6 +46,6 @@ export function Tooltip({ text, children }) {
           }} />
         </div>
       )}
-    </span>
+    </div>
   );
 }
