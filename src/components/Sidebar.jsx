@@ -248,6 +248,7 @@ export function Sidebar({
               type="text"
               value={customLenderName}
               onChange={(e) => setCustomLenderName(e.target.value)}
+              maxLength={80}
               placeholder="e.g. Wells Fargo"
               style={{ width: '100%', padding: '10px 12px', background: '#0a0a0b', border: `1px solid ${c.accent}`, borderRadius: 8, color: c.text, fontSize: 14, outline: 'none' }}
             />

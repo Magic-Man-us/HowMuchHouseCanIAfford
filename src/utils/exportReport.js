@@ -190,6 +190,7 @@ export function exportReport({ calc, inputs }) {
   ));
   body.appendChild(disclaimer);
 
+  doc.close();
   printWindow.focus();
-  setTimeout(() => printWindow.print(), 300);
+  printWindow.print();
 }
