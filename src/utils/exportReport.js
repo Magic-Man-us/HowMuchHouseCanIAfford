@@ -11,8 +11,11 @@ export function exportReport({ calc, inputs }) {
 
   const lenderName = selectedLender === 'custom' ? (customLenderName || 'Custom') : lenders[selectedLender].name;
 
-  // Build report using DOM APIs
   const printWindow = window.open('', '_blank');
+  if (!printWindow) {
+    alert('Please allow popups to export the report.');
+    return;
+  }
   const doc = printWindow.document;
 
   const style = doc.createElement('style');

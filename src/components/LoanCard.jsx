@@ -16,7 +16,7 @@ export function LoanCard({ name, loan, color, calc, selectedLender, homeInsuranc
       <div style={{ fontSize: 36, fontWeight: 700, color: c.text }}>{fmt2(loan.total)}</div>
       <div style={{ fontSize: 13, color: c.dim, marginBottom: 20 }}>per month</div>
       <div style={{ borderTop: `1px solid ${c.border}`, paddingTop: 16 }}>
-        {[['Principal & Interest', loan.principal], ['Property Tax', calc.monthlyTax], ['Insurance', homeInsurance], calc.pmi > 0 && ['PMI', calc.pmi, '#facc15'], hoaFees > 0 && ['HOA', hoaFees]].filter(Boolean).map(([label, val, col], i) => (
+        {[['Principal & Interest', loan.principal], ['Property Tax', calc.monthlyTax], ['Insurance', homeInsurance], calc.pmi > 0 && [calc.pmiLabel || 'PMI', calc.pmi, '#facc15'], hoaFees > 0 && ['HOA', hoaFees]].filter(Boolean).map(([label, val, col], i) => (
           <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: `1px solid ${c.border}22` }}>
             <span style={{ fontSize: 13, color: col || c.muted }}>{label}</span>
             <span style={{ fontSize: 13, fontWeight: 500, color: col || c.text }}>{fmt2(val)}</span>

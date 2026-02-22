@@ -73,7 +73,6 @@ export function useMortgageCalculations({
 
     const loan30 = make(30, isJumbo ? rateJumbo30 : rate30);
     const loan15 = make(15, isJumbo ? rateJumbo15 : rate15);
-    const primaryLoan = loan30;
 
     const firstYearTotal30 = totalUpfront + (loan30.total * 12);
     const firstYearTotal15 = totalUpfront + (loan15.total * 12);
@@ -129,7 +128,7 @@ export function useMortgageCalculations({
 
     return {
       monthlyIncome, monthlyDebt, downPayment, loanAmount, isJumbo, pmi, pmiLabel, monthlyTax,
-      loan30, loan15, primaryLoan, pointsCost, upfrontMIP,
+      loan30, loan15, pointsCost, upfrontMIP,
       maxHome: maxLoan / (1 - downPaymentPercent / 100), maxHousing, closingCosts, estimatedTitleInsurance,
       prepaidItems, totalClosingCosts, cashToClose, totalUpfront, recommendedReserves, firstYearTotal30, firstYearTotal15,
       refi: { balanceAtRefi, refiClosingCosts, stayMonthlyPayment, refiMonthlyPayment, monthlySavings, stayTotalPaid, refiTotalPaid, totalSavings, breakEvenMonths, breakEvenYears: breakEvenMonths / 12, equityAtRefi, ltv, pmiDropsAtRefi, newPayoffYear: refiYears + refiTerm, stayPayoffYear: 30 },

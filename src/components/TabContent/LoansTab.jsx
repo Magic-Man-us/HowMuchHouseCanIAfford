@@ -3,17 +3,18 @@ import { Card } from '../ui';
 import { LoanCard } from '../LoanCard';
 import { fmt } from '../../utils/formatters';
 
+const LOAN_TYPE_INFO = {
+  conventional: { label: 'Conventional Loan', color: c.accent, desc: 'Standard loan. PMI required if down payment < 20%.' },
+  fha: { label: 'FHA Loan', color: '#fb923c', desc: 'Government-backed. 3.5% min down. Includes annual MIP (0.55%) and upfront MIP (1.75%).' },
+  va: { label: 'VA Loan', color: '#4ade80', desc: 'For eligible veterans. 0% down, no monthly PMI. Funding fee applies.' },
+  usda: { label: 'USDA Loan', color: '#06b6d4', desc: 'Rural property program. 0% down. Annual guarantee fee (0.35%) + 1% upfront.' },
+};
+
 export function LoansTab({
   calc, selectedLender, homeInsurance, hoaFees,
   loanType,
 }) {
-  const loanTypeLabels = {
-    conventional: { label: 'Conventional Loan', color: c.accent, desc: 'Standard loan. PMI required if down payment < 20%.' },
-    fha: { label: 'FHA Loan', color: '#fb923c', desc: 'Government-backed. 3.5% min down. Includes annual MIP (0.55%) and upfront MIP (1.75%).' },
-    va: { label: 'VA Loan', color: '#4ade80', desc: 'For eligible veterans. 0% down, no monthly PMI. Funding fee applies.' },
-    usda: { label: 'USDA Loan', color: '#06b6d4', desc: 'Rural property program. 0% down. Annual guarantee fee (0.35%) + 1% upfront.' },
-  };
-  const info = loanTypeLabels[loanType];
+  const info = LOAN_TYPE_INFO[loanType];
 
   return (
     <>

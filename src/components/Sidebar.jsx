@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { c } from '../constants/theme';
 import { lenders } from '../constants/lenders';
-import { Input, Select, Slider, Tooltip } from './ui';
+import { Input, Select, Slider } from './ui';
 import { fmt, pct } from '../utils/formatters';
 
 function AccordionSection({ title, defaultOpen = false, children }) {

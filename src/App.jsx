@@ -40,6 +40,7 @@ export default function App() {
   // Lender & Rates
   const [selectedLender, setSelectedLender] = useState('navy');
   const [customLenderName, setCustomLenderName] = useState('');
+  const [savedCustomRates, setSavedCustomRates] = useState(null);
   const [rate30Base, setRate30Base] = useState(lenders.navy.r30);
   const [rate15Base, setRate15Base] = useState(lenders.navy.r15);
   const [rateJumbo30Base, setRateJumbo30Base] = useState(lenders.navy.j30);
@@ -74,9 +75,6 @@ export default function App() {
   const rate15 = rate15Base + creditAdjustment;
   const rateJumbo30 = rateJumbo30Base + creditAdjustment;
   const rateJumbo15 = rateJumbo15Base + creditAdjustment;
-
-  // Store custom rates so they survive lender switches
-  const [savedCustomRates, setSavedCustomRates] = useState(null);
 
   const handleLenderChange = useCallback((lenderId) => {
     // Save current rates if leaving custom

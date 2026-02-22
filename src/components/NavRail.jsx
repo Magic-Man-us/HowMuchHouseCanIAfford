@@ -12,7 +12,6 @@ export function NavRail({ activeSection, setActiveSection, onExport }) {
   return (
     <div style={{
       width: 72,
-      minHeight: '100vh',
       background: '#0a0a0b',
       borderRight: `1px solid ${c.border}`,
       display: 'flex',
