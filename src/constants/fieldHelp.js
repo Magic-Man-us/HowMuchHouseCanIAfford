@@ -45,6 +45,28 @@ export const fieldHelp = {
     },
   },
 
+  marginalTaxRate: {
+    hint: 'Your federal tax bracket. Determines mortgage interest deduction value.',
+    info: {
+      title: 'Marginal Tax Rate',
+      description: 'Your highest federal income tax bracket. Mortgage interest and property taxes are deductible if you itemize, reducing your effective housing cost.',
+      formula: 'Monthly Tax Savings = (Annual Mortgage Interest × Tax Rate) / 12\nAfter-Tax Housing Cost = Monthly Payment − Tax Savings',
+      details: 'The mortgage interest deduction is one of the biggest tax benefits of homeownership. At a 24% tax rate with $28K/yr in mortgage interest, you save $6,720/yr ($560/mo). This only applies if you itemize deductions (total itemized > standard deduction of $14,600 single / $29,200 married). The SALT deduction cap of $10,000 limits state/local tax deductibility.',
+      links: [
+        { label: 'IRS: Mortgage Interest Deduction', url: 'https://www.irs.gov/publications/p936' },
+      ],
+    },
+  },
+  rentalIncome: {
+    hint: 'Monthly rental income from the property (e.g., duplex). Lenders use 75%.',
+    info: {
+      title: 'Rental Income',
+      description: 'Expected monthly rental income from the property (e.g., renting out a unit in a multi-family, or a room/ADU). Lenders count 75% of gross rental income toward your qualifying income.',
+      formula: 'Effective Income = Gross Income + (Rental Income × 0.75)\nDTI uses Effective Income in denominator',
+      details: 'Common for house-hacking: buy a duplex/triplex, live in one unit, rent the others. The 75% factor accounts for vacancy and maintenance. You need a signed lease or appraiser\'s market rent estimate. FHA allows this for 2-4 unit properties if owner-occupied.',
+    },
+  },
+
   // ── Monthly Debts ─────────────────────────────────────────────────
   studentLoans: {
     hint: 'Monthly student loan payment. Use IBR/IDR amount if applicable.',
@@ -162,7 +184,29 @@ export const fieldHelp = {
     },
   },
 
+  appreciationRate: {
+    hint: 'Expected annual home price increase. US average is ~3-4%.',
+    info: {
+      title: 'Home Appreciation Rate',
+      description: 'Expected annual percentage increase in the home\'s market value. This significantly affects your equity growth and the rent-vs-buy calculation.',
+      formula: 'Home Value at Year N = Purchase Price × (1 + Rate%)^N\nEquity = Home Value − Remaining Mortgage Balance',
+      details: 'US national average: 3-4% historically, but varies hugely by market. Hot markets (Austin, Nashville) may see 5-8%. Some areas appreciate below inflation. Appreciation is the #1 factor that makes buying beat renting long-term. A $500K home at 3% appreciation gains $15K/yr in year 1, compounding over time.',
+      links: [
+        { label: 'FHFA House Price Index', url: 'https://www.fhfa.gov/data/hpi' },
+      ],
+    },
+  },
+
   // ── Loan Structure ────────────────────────────────────────────────
+  loanTerm: {
+    hint: 'Primary loan term. 30yr is standard, 20yr is a popular middle ground.',
+    info: {
+      title: 'Primary Loan Term',
+      description: 'The length of your primary mortgage in years. Shorter terms have higher monthly payments but dramatically lower total interest.',
+      formula: '20-yr vs 30-yr on $400K at 7%:\n30yr: $2,661/mo, $558K total interest\n20yr: $3,101/mo, $344K total interest\nSavings: $214K in interest',
+      details: '30 years: Lowest payment, most flexibility, most interest paid. 25 years: Slightly higher payment, saves significantly on interest. 20 years: Popular compromise — ~$400/mo more than 30yr but saves $200K+ in interest. 15 years: Highest payment but lowest rate and least interest. Match the term to your cash flow and goals.',
+    },
+  },
   loanType: {
     hint: 'Conventional is most common. FHA/VA/USDA have special benefits.',
     info: {
@@ -248,6 +292,15 @@ export const fieldHelp = {
   },
 
   // ── Closing Costs ─────────────────────────────────────────────────
+  sellerCredits: {
+    hint: 'Seller contribution toward your closing costs. Negotiate in your offer.',
+    info: {
+      title: 'Seller Credits',
+      description: 'A dollar amount the seller agrees to pay toward your closing costs, reducing your cash-to-close. Negotiated as part of the purchase offer.',
+      formula: 'Net Closing Costs = Gross Closing Costs − Seller Credits\nCash to Close = Down Payment + Net Closing Costs',
+      details: 'Limits vary by loan type: Conventional allows 3% (if <10% down), 6% (10-25% down), or 9% (>25% down). FHA allows up to 6%. VA allows up to 4%. Seller credits are extremely common — especially in buyer\'s markets or when the seller is motivated. Don\'t leave money on the table!',
+    },
+  },
   closingCostPercent: {
     hint: 'Lender fees as % of loan. Typically 2-5%.',
     info: {
@@ -351,6 +404,18 @@ export const fieldHelp = {
       title: 'Apply to Loan',
       description: 'Select whether to model extra payments against the 30-year or 15-year loan scenario.',
       details: 'Extra payments on a 30-year loan save more total interest because the baseline interest cost is higher. Extra payments on a 15-year loan have less impact since the term is already short and the rate is lower.',
+    },
+  },
+  currentRent: {
+    hint: 'Your current monthly rent. Used for rent-vs-buy comparison.',
+    info: {
+      title: 'Current Monthly Rent',
+      description: 'What you\'re currently paying in rent per month. This is the baseline for the rent-vs-buy analysis.',
+      formula: 'True Cost of Owning = Monthly Payment − Tax Deduction + Maintenance − Appreciation\nBuy Advantage = Equity Built + Appreciation − (Extra Cost vs Rent)',
+      details: 'The rent-vs-buy comparison accounts for: mortgage interest tax deduction, home appreciation, maintenance costs (1% of home value/year), opportunity cost of your down payment (7% return if invested), and 3% annual rent increases. Buying usually wins after 5-7 years in most markets.',
+      links: [
+        { label: 'NYT Rent vs Buy Calculator', url: 'https://www.nytimes.com/interactive/2014/upshot/buy-rent-calculator.html' },
+      ],
     },
   },
   extraPayment: {

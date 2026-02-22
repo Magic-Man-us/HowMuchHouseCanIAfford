@@ -5,6 +5,7 @@ import { fmt } from '../../utils/formatters';
 export function CostsTab({
   calc,
   closingCostPercent, setClosingCostPercent,
+  sellerCredits, setSellerCredits,
   inspectionFee, setInspectionFee,
   appraisalFee, setAppraisalFee,
   titleInsurance, setTitleInsurance,
@@ -21,6 +22,7 @@ export function CostsTab({
         <Input label="Inspection Fee" value={inspectionFee} onChange={setInspectionFee} prefix="$" min={0} max={10000} fieldKey="inspectionFee" />
         <Input label="Appraisal Fee" value={appraisalFee} onChange={setAppraisalFee} prefix="$" min={0} max={10000} fieldKey="appraisalFee" />
         <Input label="Title Insurance" value={titleInsurance || Math.round(calc.estimatedTitleInsurance)} onChange={setTitleInsurance} prefix="$" min={0} max={100000} fieldKey="titleInsurance" />
+        <Input label="Seller Credits" value={sellerCredits} onChange={setSellerCredits} prefix="$" min={0} max={100000} fieldKey="sellerCredits" />
         <div style={{ paddingTop: 12, borderTop: `1px solid ${c.border}` }}>
           {[
             ['Lender Closing Costs', calc.closingCosts],
@@ -29,6 +31,7 @@ export function CostsTab({
             ['Prepaid (3mo escrow)', calc.prepaidItems],
             calc.pointsCost > 0 && ['Discount Points', calc.pointsCost, c.accent],
             calc.upfrontMIP > 0 && [loanType === 'fha' ? 'Upfront MIP (1.75%)' : 'Upfront Guarantee (1%)', calc.upfrontMIP, '#fb923c'],
+            sellerCredits > 0 && ['Seller Credits', -sellerCredits, '#4ade80'],
           ].filter(Boolean).map(([label, val, color], i) => (
             <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0' }}>
               <span style={{ fontSize: 12, color: color || c.muted }}>{label}</span>

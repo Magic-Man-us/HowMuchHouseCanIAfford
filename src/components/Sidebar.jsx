@@ -57,6 +57,8 @@ export function Sidebar({
   creditScore, setCreditScore, creditTier, creditAdjustment,
   employmentType, setEmploymentType,
   assets, setAssets,
+  marginalTaxRate, setMarginalTaxRate,
+  rentalIncome, setRentalIncome,
   studentLoans, setStudentLoans, carPayment, setCarPayment,
   creditCards, setCreditCards, otherDebt, setOtherDebt,
   homePrice, setHomePrice,
@@ -67,7 +69,9 @@ export function Sidebar({
   propertyTaxRate, setPropertyTaxRate,
   homeInsurance, setHomeInsurance,
   hoaFees, setHoaFees,
+  appreciationRate, setAppreciationRate,
   loanType, setLoanType,
+  loanTerm, setLoanTerm,
   rateType, setRateType,
   discountPoints, setDiscountPoints,
   selectedLender, handleLenderChange,
@@ -139,9 +143,27 @@ export function Sidebar({
 
         <Input label="Assets / Savings" value={assets} onChange={setAssets} prefix="$" min={0} max={100000000} fieldKey="assets" />
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: 12, borderTop: `1px solid ${c.border}` }}>
-          <span style={{ fontSize: 13, color: c.dim }}>Monthly Gross</span>
-          <span style={{ fontSize: 15, fontWeight: 600 }}>{fmt(calc.monthlyIncome)}</span>
+        <Select
+          label="Marginal Tax Rate"
+          value={String(marginalTaxRate)}
+          onChange={(v) => setMarginalTaxRate(Number(v))}
+          options={[['10', '10% ($0-$11K)'], ['12', '12% ($11K-$44K)'], ['22', '22% ($44K-$95K)'], ['24', '24% ($95K-$191K)'], ['32', '32% ($191K-$243K)'], ['35', '35% ($243K-$609K)'], ['37', '37% ($609K+)']]}
+          fieldKey="marginalTaxRate"
+        />
+
+        <Input label="Rental Income" value={rentalIncome} onChange={setRentalIncome} prefix="$" suffix="/mo" min={0} max={100000} fieldKey="rentalIncome" />
+
+        <div style={{ paddingTop: 12, borderTop: `1px solid ${c.border}` }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+            <span style={{ fontSize: 13, color: c.dim }}>Monthly Gross</span>
+            <span style={{ fontSize: 15, fontWeight: 600 }}>{fmt(calc.monthlyIncome)}</span>
+          </div>
+          {rentalIncome > 0 && (
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: 11, color: c.dim }}>+ Rental (75%)</span>
+              <span style={{ fontSize: 11, color: c.accent2 }}>+{fmt(rentalIncome * 0.75)}</span>
+            </div>
+          )}
         </div>
       </AccordionSection>
 
@@ -201,6 +223,7 @@ export function Sidebar({
         <Input label="Property Tax Rate" value={propertyTaxRate} onChange={setPropertyTaxRate} suffix="% /yr" step={0.1} min={0} max={10} fieldKey="propertyTaxRate" />
         <Input label="Home Insurance" value={homeInsurance} onChange={setHomeInsurance} prefix="$" suffix="/mo" min={0} max={10000} fieldKey="homeInsurance" />
         <Input label="HOA Fees" value={hoaFees} onChange={setHoaFees} prefix="$" suffix="/mo" min={0} max={10000} fieldKey="hoaFees" />
+        <Input label="Appreciation Rate" value={appreciationRate} onChange={setAppreciationRate} suffix="% /yr" step={0.5} min={-5} max={15} fieldKey="appreciationRate" />
 
         <div style={{ paddingTop: 12, borderTop: `1px solid ${c.border}` }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
@@ -220,6 +243,14 @@ export function Sidebar({
           onChange={setLoanType}
           options={[['conventional', 'Conventional'], ['fha', 'FHA'], ['va', 'VA'], ['usda', 'USDA']]}
           fieldKey="loanType"
+        />
+
+        <Select
+          label="Primary Loan Term"
+          value={String(loanTerm)}
+          onChange={(v) => setLoanTerm(Number(v))}
+          options={[['30', '30 Years'], ['25', '25 Years'], ['20', '20 Years'], ['15', '15 Years']]}
+          fieldKey="loanTerm"
         />
 
         {loanType === 'fha' && (

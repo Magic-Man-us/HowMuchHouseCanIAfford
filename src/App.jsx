@@ -18,6 +18,8 @@ export default function App() {
   const [creditScore, setCreditScore] = useState(850);
   const [employmentType, setEmploymentType] = useState('W-2');
   const [assets, setAssets] = useState(0);
+  const [marginalTaxRate, setMarginalTaxRate] = useState(24);
+  const [rentalIncome, setRentalIncome] = useState(0);
 
   // Monthly Debts
   const [studentLoans, setStudentLoans] = useState(500);
@@ -34,9 +36,11 @@ export default function App() {
   const [propertyTaxRate, setPropertyTaxRate] = useState(1.1);
   const [homeInsurance, setHomeInsurance] = useState(150);
   const [hoaFees, setHoaFees] = useState(0);
+  const [appreciationRate, setAppreciationRate] = useState(3);
 
   // Loan Structure
   const [loanType, setLoanType] = useState('conventional');
+  const [loanTerm, setLoanTerm] = useState(30);
   const [rateType, setRateType] = useState('Fixed');
   const [discountPoints, setDiscountPoints] = useState(0);
 
@@ -51,12 +55,16 @@ export default function App() {
 
   // Upfront Costs
   const [closingCostPercent, setClosingCostPercent] = useState(3);
+  const [sellerCredits, setSellerCredits] = useState(0);
   const [inspectionFee, setInspectionFee] = useState(500);
   const [appraisalFee, setAppraisalFee] = useState(550);
   const [titleInsurance, setTitleInsurance] = useState(0);
   const [renovationBudget, setRenovationBudget] = useState(0);
   const [movingCosts, setMovingCosts] = useState(3000);
   const [furnitureAppliances, setFurnitureAppliances] = useState(5000);
+
+  // Rent vs Buy
+  const [currentRent, setCurrentRent] = useState(2000);
 
   // Refinance
   const [refiYears, setRefiYears] = useState(5);
@@ -111,11 +119,12 @@ export default function App() {
     totalIncome, studentLoans, carPayment, creditCards, otherDebt,
     homePrice, downPaymentPercent, propertyTaxRate, homeInsurance, hoaFees,
     rate30, rate15, rateJumbo30, rateJumbo15,
-    closingCostPercent, inspectionFee, appraisalFee, titleInsurance,
+    closingCostPercent, sellerCredits, inspectionFee, appraisalFee, titleInsurance,
     renovationBudget, movingCosts, furnitureAppliances,
     refiYears, refiRate, refiTerm, refiClosingPercent,
     extraPayment, extraPaymentLoan,
-    loanType, discountPoints,
+    loanType, loanTerm, discountPoints,
+    marginalTaxRate, rentalIncome, appreciationRate, currentRent,
   });
 
   const handleExport = () => {
@@ -131,43 +140,47 @@ export default function App() {
   };
 
   const getState = useCallback(() => ({
-    totalIncome, creditScore, employmentType, assets,
+    totalIncome, creditScore, employmentType, assets, marginalTaxRate, rentalIncome,
     studentLoans, carPayment, creditCards, otherDebt,
     homePrice, downPaymentPercent, propertyType, propertyUse, propertyState,
-    propertyTaxRate, homeInsurance, hoaFees,
-    loanType, rateType, discountPoints,
+    propertyTaxRate, homeInsurance, hoaFees, appreciationRate,
+    loanType, loanTerm, rateType, discountPoints,
     selectedLender, customLenderName,
     rate30Base, rate15Base, rateJumbo30Base, rateJumbo15Base,
-    closingCostPercent, inspectionFee, appraisalFee, titleInsurance,
+    closingCostPercent, sellerCredits, inspectionFee, appraisalFee, titleInsurance,
     renovationBudget, movingCosts, furnitureAppliances,
     refiYears, refiRate, refiTerm, refiClosingPercent,
     extraPayment, extraPaymentLoan,
+    currentRent,
   }), [
-    totalIncome, creditScore, employmentType, assets,
+    totalIncome, creditScore, employmentType, assets, marginalTaxRate, rentalIncome,
     studentLoans, carPayment, creditCards, otherDebt,
     homePrice, downPaymentPercent, propertyType, propertyUse, propertyState,
-    propertyTaxRate, homeInsurance, hoaFees,
-    loanType, rateType, discountPoints,
+    propertyTaxRate, homeInsurance, hoaFees, appreciationRate,
+    loanType, loanTerm, rateType, discountPoints,
     selectedLender, customLenderName,
     rate30Base, rate15Base, rateJumbo30Base, rateJumbo15Base,
-    closingCostPercent, inspectionFee, appraisalFee, titleInsurance,
+    closingCostPercent, sellerCredits, inspectionFee, appraisalFee, titleInsurance,
     renovationBudget, movingCosts, furnitureAppliances,
     refiYears, refiRate, refiTerm, refiClosingPercent,
     extraPayment, extraPaymentLoan,
+    currentRent,
   ]);
 
   const setters = {
     totalIncome: setTotalIncome, creditScore: setCreditScore, employmentType: setEmploymentType, assets: setAssets,
+    marginalTaxRate: setMarginalTaxRate, rentalIncome: setRentalIncome,
     studentLoans: setStudentLoans, carPayment: setCarPayment, creditCards: setCreditCards, otherDebt: setOtherDebt,
     homePrice: setHomePrice, downPaymentPercent: setDownPaymentPercent, propertyType: setPropertyType, propertyUse: setPropertyUse, propertyState: setPropertyState,
-    propertyTaxRate: setPropertyTaxRate, homeInsurance: setHomeInsurance, hoaFees: setHoaFees,
-    loanType: setLoanType, rateType: setRateType, discountPoints: setDiscountPoints,
+    propertyTaxRate: setPropertyTaxRate, homeInsurance: setHomeInsurance, hoaFees: setHoaFees, appreciationRate: setAppreciationRate,
+    loanType: setLoanType, loanTerm: setLoanTerm, rateType: setRateType, discountPoints: setDiscountPoints,
     selectedLender: setSelectedLender, customLenderName: setCustomLenderName,
     rate30Base: setRate30Base, rate15Base: setRate15Base, rateJumbo30Base: setRateJumbo30Base, rateJumbo15Base: setRateJumbo15Base,
-    closingCostPercent: setClosingCostPercent, inspectionFee: setInspectionFee, appraisalFee: setAppraisalFee, titleInsurance: setTitleInsurance,
+    closingCostPercent: setClosingCostPercent, sellerCredits: setSellerCredits, inspectionFee: setInspectionFee, appraisalFee: setAppraisalFee, titleInsurance: setTitleInsurance,
     renovationBudget: setRenovationBudget, movingCosts: setMovingCosts, furnitureAppliances: setFurnitureAppliances,
     refiYears: setRefiYears, refiRate: setRefiRate, refiTerm: setRefiTerm, refiClosingPercent: setRefiClosingPercent,
     extraPayment: setExtraPayment, extraPaymentLoan: setExtraPaymentLoan,
+    currentRent: setCurrentRent,
   };
 
   const applyState = useCallback((data) => {
@@ -234,6 +247,8 @@ export default function App() {
             creditTier={creditTier} creditAdjustment={creditAdjustment}
             employmentType={employmentType} setEmploymentType={setEmploymentType}
             assets={assets} setAssets={setAssets}
+            marginalTaxRate={marginalTaxRate} setMarginalTaxRate={setMarginalTaxRate}
+            rentalIncome={rentalIncome} setRentalIncome={setRentalIncome}
             studentLoans={studentLoans} setStudentLoans={setStudentLoans}
             carPayment={carPayment} setCarPayment={setCarPayment}
             creditCards={creditCards} setCreditCards={setCreditCards}
@@ -246,7 +261,9 @@ export default function App() {
             propertyTaxRate={propertyTaxRate} setPropertyTaxRate={setPropertyTaxRate}
             homeInsurance={homeInsurance} setHomeInsurance={setHomeInsurance}
             hoaFees={hoaFees} setHoaFees={setHoaFees}
+            appreciationRate={appreciationRate} setAppreciationRate={setAppreciationRate}
             loanType={loanType} setLoanType={setLoanType}
+            loanTerm={loanTerm} setLoanTerm={setLoanTerm}
             rateType={rateType} setRateType={setRateType}
             discountPoints={discountPoints} setDiscountPoints={setDiscountPoints}
             selectedLender={selectedLender} handleLenderChange={handleLenderChange}
@@ -294,7 +311,7 @@ export default function App() {
             <LoansTab
               calc={calc} selectedLender={selectedLender}
               homeInsurance={homeInsurance} hoaFees={hoaFees}
-              loanType={loanType}
+              loanType={loanType} loanTerm={loanTerm}
             />
           )}
 
@@ -302,6 +319,7 @@ export default function App() {
             <CostsTab
               calc={calc}
               closingCostPercent={closingCostPercent} setClosingCostPercent={setClosingCostPercent}
+              sellerCredits={sellerCredits} setSellerCredits={setSellerCredits}
               inspectionFee={inspectionFee} setInspectionFee={setInspectionFee}
               appraisalFee={appraisalFee} setAppraisalFee={setAppraisalFee}
               titleInsurance={titleInsurance} setTitleInsurance={setTitleInsurance}
@@ -313,7 +331,11 @@ export default function App() {
           )}
 
           {activeSection === 'summary' && (
-            <SummaryTab calc={calc} renovationBudget={renovationBudget} movingCosts={movingCosts} furnitureAppliances={furnitureAppliances} />
+            <SummaryTab
+              calc={calc}
+              renovationBudget={renovationBudget} movingCosts={movingCosts} furnitureAppliances={furnitureAppliances}
+              currentRent={currentRent} setCurrentRent={setCurrentRent}
+            />
           )}
 
           {activeSection === 'extra' && (

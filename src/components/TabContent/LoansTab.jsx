@@ -12,9 +12,10 @@ const LOAN_TYPE_INFO = {
 
 export function LoansTab({
   calc, selectedLender, homeInsurance, hoaFees,
-  loanType,
+  loanType, loanTerm,
 }) {
   const info = LOAN_TYPE_INFO[loanType];
+  const showCustom = loanTerm !== 30 && loanTerm !== 15;
 
   return (
     <>
@@ -33,19 +34,23 @@ export function LoansTab({
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: showCustom ? '1fr 1fr 1fr' : '1fr 1fr', gap: 20, marginBottom: 20 }}>
         <LoanCard name="30-Year Fixed" loan={calc.loan30} color={c.accent} calc={calc} selectedLender={selectedLender} homeInsurance={homeInsurance} hoaFees={hoaFees} />
+        {showCustom && (
+          <LoanCard name={`${loanTerm}-Year Fixed`} loan={calc.loanCustom} color={c.pink} calc={calc} selectedLender={selectedLender} homeInsurance={homeInsurance} hoaFees={hoaFees} />
+        )}
         <LoanCard name="15-Year Fixed" loan={calc.loan15} color={c.accent2} calc={calc} selectedLender={selectedLender} homeInsurance={homeInsurance} hoaFees={hoaFees} />
       </div>
 
       <Card style={{ marginBottom: 20 }}>
-        <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 16 }}>15-Year vs 30-Year</h3>
+        <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 16 }}>Loan Comparison</h3>
         {[
-          ['Monthly Difference', `+${fmt(calc.loan15.total - calc.loan30.total)}/mo`, '#facc15'],
-          ['Interest Savings (15-yr)', fmt(calc.loan30.totalInterest - calc.loan15.totalInterest), '#4ade80'],
-          ['Payoff Difference', '15 years earlier', c.accent],
-        ].map(([label, value, color], i) => (
-          <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: i < 2 ? `1px solid ${c.border}22` : 'none' }}>
+          ['Monthly Difference (15 vs 30)', `+${fmt(calc.loan15.total - calc.loan30.total)}/mo`, '#facc15'],
+          ['Interest Savings (15-yr vs 30-yr)', fmt(calc.loan30.totalInterest - calc.loan15.totalInterest), '#4ade80'],
+          showCustom && [`Interest Savings (${loanTerm}-yr vs 30-yr)`, fmt(calc.loan30.totalInterest - calc.loanCustom.totalInterest), c.pink],
+          ['Payoff Difference (15 vs 30)', '15 years earlier', c.accent],
+        ].filter(Boolean).map(([label, value, color], i) => (
+          <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: `1px solid ${c.border}22` }}>
             <span style={{ color: c.muted, fontSize: 13 }}>{label}</span>
             <span style={{ fontWeight: 600, color, fontSize: 14 }}>{value}</span>
           </div>

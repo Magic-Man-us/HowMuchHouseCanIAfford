@@ -5,6 +5,8 @@ export const STATE_DEFAULTS = {
   creditScore: 850,
   employmentType: 'W-2',
   assets: 0,
+  marginalTaxRate: 24,
+  rentalIncome: 0,
   studentLoans: 500,
   carPayment: 0,
   creditCards: 0,
@@ -17,7 +19,9 @@ export const STATE_DEFAULTS = {
   propertyTaxRate: 1.1,
   homeInsurance: 150,
   hoaFees: 0,
+  appreciationRate: 3,
   loanType: 'conventional',
+  loanTerm: 30,
   rateType: 'Fixed',
   discountPoints: 0,
   selectedLender: 'navy',
@@ -27,6 +31,7 @@ export const STATE_DEFAULTS = {
   rateJumbo30Base: 7.000,
   rateJumbo15Base: 6.125,
   closingCostPercent: 3,
+  sellerCredits: 0,
   inspectionFee: 500,
   appraisalFee: 550,
   titleInsurance: 0,
@@ -39,6 +44,7 @@ export const STATE_DEFAULTS = {
   refiClosingPercent: 2,
   extraPayment: 200,
   extraPaymentLoan: '30',
+  currentRent: 2000,
 };
 
 // Short param names for URL encoding (keeps URLs compact)
@@ -47,6 +53,8 @@ export const URL_KEY_MAP = {
   creditScore: 'cs',
   employmentType: 'et',
   assets: 'as',
+  marginalTaxRate: 'mtr',
+  rentalIncome: 'ri',
   studentLoans: 'sl',
   carPayment: 'cp',
   creditCards: 'cc',
@@ -59,7 +67,9 @@ export const URL_KEY_MAP = {
   propertyTaxRate: 'tr',
   homeInsurance: 'hi',
   hoaFees: 'hoa',
+  appreciationRate: 'apr',
   loanType: 'lt',
+  loanTerm: 'ltm',
   rateType: 'rt',
   discountPoints: 'pts',
   selectedLender: 'len',
@@ -69,6 +79,7 @@ export const URL_KEY_MAP = {
   rateJumbo30Base: 'j30',
   rateJumbo15Base: 'j15',
   closingCostPercent: 'clp',
+  sellerCredits: 'sc',
   inspectionFee: 'inf',
   appraisalFee: 'apf',
   titleInsurance: 'tli',
@@ -81,6 +92,7 @@ export const URL_KEY_MAP = {
   refiClosingPercent: 'rcp',
   extraPayment: 'ep',
   extraPaymentLoan: 'epl',
+  currentRent: 'cr',
 };
 
 // Invert for decoding
