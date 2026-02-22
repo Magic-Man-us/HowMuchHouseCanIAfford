@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react()],
-  base: '/HowMuchHouseCanIAfford/',
+  base: command === 'build' ? '/HowMuchHouseCanIAfford/' : '/',
   build: {
     sourcemap: false,
     minify: 'terser',
@@ -14,4 +14,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));
