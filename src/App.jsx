@@ -1,10 +1,12 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { lenders } from './constants/lenders';
 import { getCreditAdjustment, getCreditTier } from './constants/creditTiers';
 import { c } from './constants/theme';
 import { fmt } from './utils/formatters';
 import { useMortgageCalculations } from './hooks/useMortgageCalculations';
 import { exportReport } from './utils/exportReport';
+import { saveScenario, loadScenario } from './utils/saveLoad';
+import { encodeStateToUrl, decodeStateFromUrl } from './utils/urlParams';
 import { Stat } from './components/ui';
 import { NavRail } from './components/NavRail';
 import { Sidebar } from './components/Sidebar';
@@ -67,6 +69,8 @@ export default function App() {
 
   // UI
   const [activeSection, setActiveSection] = useState('loans');
+  const [shareTooltip, setShareTooltip] = useState(null);
+  const fileInputRef = useRef(null);
 
   const creditAdjustment = getCreditAdjustment(creditScore);
   const creditTier = getCreditTier(creditScore);
@@ -125,10 +129,99 @@ export default function App() {
     });
   };
 
+  const getState = useCallback(() => ({
+    totalIncome, creditScore, employmentType, assets,
+    studentLoans, carPayment, creditCards, otherDebt,
+    homePrice, downPaymentPercent, propertyType, propertyUse,
+    propertyTaxRate, homeInsurance, hoaFees,
+    loanType, rateType, discountPoints,
+    selectedLender, customLenderName,
+    rate30Base, rate15Base, rateJumbo30Base, rateJumbo15Base,
+    closingCostPercent, inspectionFee, appraisalFee, titleInsurance,
+    renovationBudget, movingCosts, furnitureAppliances,
+    refiYears, refiRate, refiTerm, refiClosingPercent,
+    extraPayment, extraPaymentLoan,
+  }), [
+    totalIncome, creditScore, employmentType, assets,
+    studentLoans, carPayment, creditCards, otherDebt,
+    homePrice, downPaymentPercent, propertyType, propertyUse,
+    propertyTaxRate, homeInsurance, hoaFees,
+    loanType, rateType, discountPoints,
+    selectedLender, customLenderName,
+    rate30Base, rate15Base, rateJumbo30Base, rateJumbo15Base,
+    closingCostPercent, inspectionFee, appraisalFee, titleInsurance,
+    renovationBudget, movingCosts, furnitureAppliances,
+    refiYears, refiRate, refiTerm, refiClosingPercent,
+    extraPayment, extraPaymentLoan,
+  ]);
+
+  const setters = {
+    totalIncome: setTotalIncome, creditScore: setCreditScore, employmentType: setEmploymentType, assets: setAssets,
+    studentLoans: setStudentLoans, carPayment: setCarPayment, creditCards: setCreditCards, otherDebt: setOtherDebt,
+    homePrice: setHomePrice, downPaymentPercent: setDownPaymentPercent, propertyType: setPropertyType, propertyUse: setPropertyUse,
+    propertyTaxRate: setPropertyTaxRate, homeInsurance: setHomeInsurance, hoaFees: setHoaFees,
+    loanType: setLoanType, rateType: setRateType, discountPoints: setDiscountPoints,
+    selectedLender: setSelectedLender, customLenderName: setCustomLenderName,
+    rate30Base: setRate30Base, rate15Base: setRate15Base, rateJumbo30Base: setRateJumbo30Base, rateJumbo15Base: setRateJumbo15Base,
+    closingCostPercent: setClosingCostPercent, inspectionFee: setInspectionFee, appraisalFee: setAppraisalFee, titleInsurance: setTitleInsurance,
+    renovationBudget: setRenovationBudget, movingCosts: setMovingCosts, furnitureAppliances: setFurnitureAppliances,
+    refiYears: setRefiYears, refiRate: setRefiRate, refiTerm: setRefiTerm, refiClosingPercent: setRefiClosingPercent,
+    extraPayment: setExtraPayment, extraPaymentLoan: setExtraPaymentLoan,
+  };
+
+  const applyState = useCallback((data) => {
+    for (const [key, val] of Object.entries(data)) {
+      if (setters[key]) setters[key](val);
+    }
+  }, []);
+
+  // Hydrate from URL params on mount
+  useEffect(() => {
+    const urlState = decodeStateFromUrl();
+    if (urlState) {
+      applyState(urlState);
+      // Clean URL without reload
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+
+  const handleSave = () => saveScenario(getState);
+
+  const handleLoad = () => fileInputRef.current?.click();
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const data = await loadScenario(file);
+      applyState(data);
+    } catch (err) {
+      alert(err.message);
+    }
+    e.target.value = '';
+  };
+
+  const handleShare = async () => {
+    const url = encodeStateToUrl(getState);
+    try {
+      await navigator.clipboard.writeText(url);
+      setShareTooltip('Copied!');
+      setTimeout(() => setShareTooltip(null), 2000);
+    } catch {
+      // Fallback: select from prompt
+      window.prompt('Copy this URL to share your scenario:', url);
+    }
+  };
+
   return (
     <div style={{ minHeight: '100vh', background: c.bg, color: c.text, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       {/* NavRail */}
-      <NavRail activeSection={activeSection} setActiveSection={setActiveSection} onExport={handleExport} />
+      <NavRail
+        activeSection={activeSection} setActiveSection={setActiveSection}
+        onExport={handleExport} onSave={handleSave} onLoad={handleLoad} onShare={handleShare}
+        shareTooltip={shareTooltip}
+      />
+      <input ref={fileInputRef} type="file" accept=".json" onChange={handleFileChange} style={{ display: 'none' }} />
 
       {/* Main layout */}
       <div style={{ display: 'flex', marginLeft: 72 }}>
@@ -167,8 +260,22 @@ export default function App() {
 
         {/* Main Content */}
         <div style={{ flex: 1, padding: '24px 32px', minWidth: 0 }}>
-          <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 4 }}>Mortgage Calculator</h1>
-          <p style={{ color: c.dim, marginBottom: 24, fontSize: 14 }}>Complete home buying cost analysis</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 4 }}>Mortgage Calculator</h1>
+              <p style={{ color: c.dim, marginBottom: 24, fontSize: 14 }}>Complete home buying cost analysis</p>
+            </div>
+            <a
+              href="https://github.com/Magic-Man-us"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: c.dim, transition: 'color 0.15s' }}
+              onMouseEnter={e => { e.currentTarget.style.color = c.text; }}
+              onMouseLeave={e => { e.currentTarget.style.color = c.dim; }}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </a>
+          </div>
 
           {/* KPI Stats Strip */}
           <div style={{ background: `linear-gradient(135deg, ${c.accent}15, ${c.accent2}10)`, borderRadius: 16, border: `1px solid ${c.accent}30`, padding: 24, marginBottom: 24 }}>

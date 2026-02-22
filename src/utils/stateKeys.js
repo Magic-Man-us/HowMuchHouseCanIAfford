@@ -1,0 +1,93 @@
+// Canonical list of all saveable input state keys with their default values.
+// Used by save/load JSON and shareable URL features.
+export const STATE_DEFAULTS = {
+  totalIncome: 200000,
+  creditScore: 850,
+  employmentType: 'W-2',
+  assets: 0,
+  studentLoans: 500,
+  carPayment: 0,
+  creditCards: 0,
+  otherDebt: 0,
+  homePrice: 500000,
+  downPaymentPercent: 20,
+  propertyType: 'Single Family',
+  propertyUse: 'Primary',
+  propertyTaxRate: 1.1,
+  homeInsurance: 150,
+  hoaFees: 0,
+  loanType: 'conventional',
+  rateType: 'Fixed',
+  discountPoints: 0,
+  selectedLender: 'navy',
+  customLenderName: '',
+  rate30Base: 6.750,
+  rate15Base: 5.875,
+  rateJumbo30Base: 7.000,
+  rateJumbo15Base: 6.125,
+  closingCostPercent: 3,
+  inspectionFee: 500,
+  appraisalFee: 550,
+  titleInsurance: 0,
+  renovationBudget: 0,
+  movingCosts: 3000,
+  furnitureAppliances: 5000,
+  refiYears: 5,
+  refiRate: 5.5,
+  refiTerm: 30,
+  refiClosingPercent: 2,
+  extraPayment: 200,
+  extraPaymentLoan: '30',
+};
+
+// Short param names for URL encoding (keeps URLs compact)
+export const URL_KEY_MAP = {
+  totalIncome: 'ti',
+  creditScore: 'cs',
+  employmentType: 'et',
+  assets: 'as',
+  studentLoans: 'sl',
+  carPayment: 'cp',
+  creditCards: 'cc',
+  otherDebt: 'od',
+  homePrice: 'hp',
+  downPaymentPercent: 'dp',
+  propertyType: 'pt',
+  propertyUse: 'pu',
+  propertyTaxRate: 'tr',
+  homeInsurance: 'hi',
+  hoaFees: 'hoa',
+  loanType: 'lt',
+  rateType: 'rt',
+  discountPoints: 'pts',
+  selectedLender: 'len',
+  customLenderName: 'cln',
+  rate30Base: 'r30',
+  rate15Base: 'r15',
+  rateJumbo30Base: 'j30',
+  rateJumbo15Base: 'j15',
+  closingCostPercent: 'clp',
+  inspectionFee: 'inf',
+  appraisalFee: 'apf',
+  titleInsurance: 'tli',
+  renovationBudget: 'ren',
+  movingCosts: 'mov',
+  furnitureAppliances: 'fur',
+  refiYears: 'ry',
+  refiRate: 'rr',
+  refiTerm: 'rtm',
+  refiClosingPercent: 'rcp',
+  extraPayment: 'ep',
+  extraPaymentLoan: 'epl',
+};
+
+// Invert for decoding
+export const URL_KEY_REVERSE = Object.fromEntries(
+  Object.entries(URL_KEY_MAP).map(([k, v]) => [v, k])
+);
+
+// Keys that are strings (not numbers)
+export const STRING_KEYS = new Set([
+  'employmentType', 'propertyType', 'propertyUse', 'loanType', 'rateType',
+  'selectedLender', 'customLenderName', 'extraPaymentLoan',
+]);
