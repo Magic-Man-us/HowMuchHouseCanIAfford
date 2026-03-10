@@ -25,7 +25,36 @@ export function NavRail({ activeSection, setActiveSection, onExport, onSave, onL
       bottom: 0,
       zIndex: 50,
     }}>
-      <div style={{ fontSize: 18, fontWeight: 800, color: c.accent, marginBottom: 24 }}>HC</div>
+      {/* App Switcher */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 20, width: '100%', padding: '0 6px' }}>
+        <a
+          href="https://magic-man-us.github.io/HowMuchCarCanIAfford/"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
+            padding: '8px 4px', borderRadius: 10, textDecoration: 'none',
+            background: 'transparent', color: c.dim,
+            fontSize: 9, fontWeight: 400,
+            cursor: 'pointer', transition: 'all 0.15s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = `${c.accent}10`; e.currentTarget.style.color = c.muted; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = c.dim; }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 17h14M5 17a2 2 0 0 1-2-2V9l2.5-5h13L21 9v6a2 2 0 0 1-2 2M5 17a2 2 0 1 0 4 0m6 0a2 2 0 1 0 4 0"/></svg>
+          Auto
+        </a>
+        <div
+          style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
+            padding: '8px 4px', borderRadius: 10,
+            background: `${c.accent}20`, color: c.accent,
+            fontSize: 9, fontWeight: 600,
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Home
+        </div>
+      </div>
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4, width: '100%', padding: '0 6px' }}>
         {sections.map(({ id, label, icon }) => {
