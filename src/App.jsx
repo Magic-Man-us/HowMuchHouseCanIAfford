@@ -187,14 +187,24 @@ export default function App() {
     }
   }, []);
 
-  // Hydrate from URL params on mount
+  // Restore from URL params or localStorage on mount
   useEffect(() => {
     const urlState = decodeStateFromUrl();
     if (urlState) {
       applyState(urlState);
       window.history.replaceState({}, '', window.location.pathname);
+    } else {
+      try {
+        const saved = localStorage.getItem('home-calc-state');
+        if (saved) applyState(JSON.parse(saved));
+      } catch {}
     }
   }, []);
+
+  // Auto-save to localStorage on every state change
+  useEffect(() => {
+    try { localStorage.setItem('home-calc-state', JSON.stringify(getState())); } catch {}
+  }, [getState]);
 
   const handleSave = () => saveScenario(getState);
 
