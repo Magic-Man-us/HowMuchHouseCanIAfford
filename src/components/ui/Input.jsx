@@ -11,14 +11,24 @@ export function Input({ label, value, onChange, prefix, suffix, step = 1, small,
   const help = fieldKey ? fieldHelp[fieldKey] : null;
   const hintText = help?.hint || tooltip;
 
+  const formatDisplay = (num) => {
+    if (num === 0) return '0';
+    if (!Number.isInteger(num)) return String(num);
+    return num.toLocaleString('en-US');
+  };
+
   useEffect(() => {
     if (!isFocused) setLocalValue(String(value));
   }, [value, isFocused]);
 
+  const parseInput = (raw) => {
+    const stripped = raw.replace(/[^0-9.\-]/g, '');
+    return parseFloat(stripped) || 0;
+  };
+
   const handleBlur = (e) => {
     setIsFocused(false);
-    const stripped = e.target.value.replace(/[^0-9.\-]/g, '');
-    let num = parseFloat(stripped) || 0;
+    let num = parseInput(e.target.value);
     if (min !== undefined && num < min) num = min;
     if (max !== undefined && num > max) num = max;
     onChange(num);
@@ -44,7 +54,7 @@ export function Input({ label, value, onChange, prefix, suffix, step = 1, small,
             <input
               type="text"
               inputMode="decimal"
-              value={isFocused ? localValue : value}
+              value={isFocused ? localValue : formatDisplay(value)}
               onFocus={() => setIsFocused(true)}
               onChange={(e) => setLocalValue(e.target.value)}
               onBlur={handleBlur}

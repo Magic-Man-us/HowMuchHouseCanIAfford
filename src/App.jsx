@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { lenders } from './constants/lenders';
 import { getCreditAdjustment, getCreditTier } from './constants/creditTiers';
 import { c } from './constants/theme';
-import { fmt } from './utils/formatters';
+import { fmt, pct } from './utils/formatters';
 import { useMortgageCalculations } from './hooks/useMortgageCalculations';
 import { exportReport } from './utils/exportReport';
 import { saveScenario, loadScenario } from './utils/saveLoad';
@@ -78,6 +78,7 @@ export default function App() {
 
   // UI
   const [activeSection, setActiveSection] = useState('loans');
+  const [activeCategory, setActiveCategory] = useState('profile');
   const [shareTooltip, setShareTooltip] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -90,7 +91,6 @@ export default function App() {
   const rateJumbo15 = rateJumbo15Base + creditAdjustment;
 
   const handleLenderChange = useCallback((lenderId) => {
-    // Save current rates if leaving custom
     if (selectedLender === 'custom') {
       setSavedCustomRates({ r30: rate30Base, r15: rate15Base, j30: rateJumbo30Base, j15: rateJumbo15Base });
     }
@@ -98,14 +98,12 @@ export default function App() {
     setSelectedLender(lenderId);
 
     if (lenderId === 'custom') {
-      // Restore saved custom rates if they exist
       if (savedCustomRates) {
         setRate30Base(savedCustomRates.r30);
         setRate15Base(savedCustomRates.r15);
         setRateJumbo30Base(savedCustomRates.j30);
         setRateJumbo15Base(savedCustomRates.j15);
       }
-      // If no saved rates, keep current rates (don't overwrite)
     } else {
       const l = lenders[lenderId];
       setRate30Base(l.r30);
@@ -194,7 +192,6 @@ export default function App() {
     const urlState = decodeStateFromUrl();
     if (urlState) {
       applyState(urlState);
-      // Clean URL without reload
       window.history.replaceState({}, '', window.location.pathname);
     }
   }, []);
@@ -222,10 +219,21 @@ export default function App() {
       setShareTooltip('Copied!');
       setTimeout(() => setShareTooltip(null), 2000);
     } catch {
-      // Fallback: select from prompt
       window.prompt('Copy this URL to share your scenario:', url);
     }
   };
+
+  const summaryItems = [
+    { label: 'Income', value: fmt(totalIncome) + '/yr', color: null, cat: 'profile' },
+    { label: 'Credit', value: `${creditScore}`, color: creditTier.color, cat: 'profile' },
+    { label: 'Debts', value: fmt(calc.monthlyDebt) + '/mo', color: null, cat: 'debts' },
+    { label: 'Home Price', value: fmt(homePrice), color: null, cat: 'property' },
+    { label: 'Down', value: `${downPaymentPercent}%`, color: null, cat: 'property' },
+    { label: 'Term', value: `${loanTerm}yr`, color: null, cat: 'loan' },
+    { label: 'Rate', value: pct(rate30), color: null, cat: 'rates' },
+    { label: 'Insurance', value: fmt(homeInsurance) + '/mo', color: null, cat: 'property' },
+    { label: 'HOA', value: fmt(hoaFees) + '/mo', color: null, cat: 'property' },
+  ];
 
   return (
     <div style={{ minHeight: '100vh', background: c.bg, color: c.text, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
@@ -242,6 +250,7 @@ export default function App() {
         {/* Input Panel */}
         <div style={{ width: 320, flexShrink: 0, borderRight: `1px solid ${c.border}`, minHeight: '100vh', padding: '20px 16px', overflowY: 'auto' }}>
           <Sidebar
+            activeCategory={activeCategory} setActiveCategory={setActiveCategory}
             totalIncome={totalIncome} setTotalIncome={setTotalIncome}
             creditScore={creditScore} setCreditScore={setCreditScore}
             creditTier={creditTier} creditAdjustment={creditAdjustment}
@@ -296,6 +305,40 @@ export default function App() {
             </a>
           </div>
 
+          {/* Settings Summary Card — clickable values navigate to sidebar category */}
+          <div style={{
+            background: '#0a0a0b',
+            border: `1px solid ${c.border}`,
+            borderRadius: 14,
+            padding: '14px 20px',
+            marginBottom: 16,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+            gap: '8px 16px',
+          }}>
+            {summaryItems.map(({ label, value, color, cat }, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveCategory(cat)}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 2,
+                  padding: '6px 4px',
+                  background: activeCategory === cat ? `${c.accent}12` : 'transparent',
+                  border: `1px solid ${activeCategory === cat ? c.accent + '40' : 'transparent'}`,
+                  borderRadius: 8,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s',
+                }}
+              >
+                <span style={{ fontSize: 10, color: c.dim, textTransform: 'uppercase', letterSpacing: 0.5 }}>{label}</span>
+                <span style={{ fontSize: 13, fontWeight: 600, color: color || c.text }}>{value}</span>
+              </button>
+            ))}
+          </div>
+
           {/* KPI Stats Strip */}
           <div style={{ background: `linear-gradient(135deg, ${c.accent}15, ${c.accent2}10)`, borderRadius: 16, border: `1px solid ${c.accent}30`, padding: 24, marginBottom: 24 }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 20 }}>
@@ -306,7 +349,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* Tab content (no tab bar, NavRail controls section) */}
+          {/* Tab content */}
           {activeSection === 'loans' && (
             <LoansTab
               calc={calc} selectedLender={selectedLender}
